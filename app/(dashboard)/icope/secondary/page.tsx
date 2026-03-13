@@ -5,13 +5,19 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import { useState, useMemo, Suspense } from 'react'
 import toast from 'react-hot-toast'
 import { logActivity } from '@/lib/activity-log'
-import { SECONDARY_FIELD_LABELS, SECONDARY_THRESHOLDS } from '@/types/icope'
+import { SECONDARY_THRESHOLDS } from '@/types/icope'
+import dynamic from 'next/dynamic'
+
+// 動態載入 AI 測試元件（避免 SSR + 減少初始 bundle）
+const ChairStandCamera = dynamic(() => import('@/components/icope/ChairStandCamera'), { ssr: false })
+const BalanceCamera = dynamic(() => import('@/components/icope/BalanceCamera'), { ssr: false })
 
 /** 複評任務設定 */
 const TASK_CONFIG: Record<string, {
     icon: string
     title: string
     description: string
+    hasAiTest?: boolean
     fields: { key: string; type: 'number' | 'text'; label: string; hint?: string; min?: number; max?: number }[]
 }> = {
     'AD8': {
@@ -26,6 +32,7 @@ const TASK_CONFIG: Record<string, {
         icon: '🦿',
         title: 'SPPB 行動量表',
         description: '包含平衡測試（3 項）、步行速度測試、椅子起立測試，各項 0-4 分。',
+        hasAiTest: true,
         fields: [
             { key: 'sppb_score', type: 'number', label: 'SPPB 總分', hint: '0-12 分，≤8 分為異常', min: 0, max: 12 },
         ],
@@ -74,8 +81,10 @@ function SecondaryContent() {
 
     const tasks = useMemo(() => tasksParam.split(',').filter(Boolean), [tasksParam])
     const [currentIndex, setCurrentIndex] = useState(0)
-    const [formData, setFormData] = useState<Record<string, any>>({})
+    const [formData, setFormData] = useState<Record<string, string | number | null>>({})
     const [saving, setSaving] = useState(false)
+    // AI 測試模式
+    const [aiTestMode, setAiTestMode] = useState<'none' | 'chair_stand' | 'balance'>('none')
 
     const currentTask = tasks[currentIndex]
     const config = currentTask ? TASK_CONFIG[currentTask] : null
@@ -100,13 +109,11 @@ function SecondaryContent() {
             return
         }
 
-        // 最後一個任務 → 寫入 Supabase
         setSaving(true)
         try {
             const supabase = createClient()
-            const insertData: Record<string, any> = { assessment_id: assessmentId }
+            const insertData: Record<string, string | number | null> = { assessment_id: assessmentId }
 
-            // 合併所有已填寫的資料
             Object.entries(formData).forEach(([key, val]) => {
                 if (val !== '' && val !== null && val !== undefined) {
                     insertData[key] = val
@@ -127,9 +134,9 @@ function SecondaryContent() {
                 assessmentId
             )
             router.push('/icope')
-
-        } catch (err: any) {
-            toast.error(err.message || '儲存失敗')
+        } catch (err: unknown) {
+            const msg = err instanceof Error ? err.message : '儲存失敗'
+            toast.error(msg)
         } finally {
             setSaving(false)
         }
@@ -137,6 +144,32 @@ function SecondaryContent() {
 
     if (!config) return null
 
+    // ========================================================================
+    // AI 測試全螢幕模式
+    // ========================================================================
+    if (aiTestMode === 'chair_stand') {
+        return (
+            <ChairStandCamera
+                assessmentId={assessmentId}
+                patientName={patientName}
+                onClose={() => setAiTestMode('none')}
+            />
+        )
+    }
+
+    if (aiTestMode === 'balance') {
+        return (
+            <BalanceCamera
+                assessmentId={assessmentId}
+                patientName={patientName}
+                onClose={() => setAiTestMode('none')}
+            />
+        )
+    }
+
+    // ========================================================================
+    // 一般表單模式
+    // ========================================================================
     return (
         <div className="space-y-6 max-w-2xl mx-auto">
             {/* Header */}
@@ -159,8 +192,8 @@ function SecondaryContent() {
                     return (
                         <div key={t} className="flex items-center gap-1.5 flex-1">
                             <div className={`w-7 h-7 rounded-full flex items-center justify-center text-sm shrink-0 ${isActive ? 'bg-primary-600 text-white' :
-                                    isDone ? 'bg-emerald-500/20 text-emerald-400' :
-                                        'bg-white/5 text-slate-600'
+                                isDone ? 'bg-emerald-500/20 text-emerald-400' :
+                                    'bg-white/5 text-slate-600'
                                 }`}>
                                 {isDone ? '✓' : tc?.icon || '?'}
                             </div>
@@ -180,6 +213,45 @@ function SecondaryContent() {
                     </div>
                 </div>
 
+                {/* SPPB AI 測試按鈕 */}
+                {config.hasAiTest && currentTask === 'SPPB' && (
+                    <div className="space-y-2">
+                        <p className="text-sm text-slate-300 font-medium">📸 AI 視覺測試（使用手機後鏡頭）</p>
+                        <div className="grid grid-cols-2 gap-3">
+                            <button
+                                onClick={() => setAiTestMode('chair_stand')}
+                                className="p-4 rounded-xl bg-blue-500/10 border-2 border-blue-500/25 hover:border-blue-500/50 hover:bg-blue-500/20 transition-all text-left group"
+                            >
+                                <div className="flex items-center gap-2 mb-1.5">
+                                    <span className="text-2xl">🪑</span>
+                                    <p className="text-white font-bold text-sm group-hover:text-blue-400 transition-colors">椅子起站測試</p>
+                                </div>
+                                <p className="text-[11px] text-slate-500 leading-tight">
+                                    AI 自動計算起立坐下 5 次並計時
+                                </p>
+                            </button>
+                            <button
+                                onClick={() => setAiTestMode('balance')}
+                                className="p-4 rounded-xl bg-purple-500/10 border-2 border-purple-500/25 hover:border-purple-500/50 hover:bg-purple-500/20 transition-all text-left group"
+                            >
+                                <div className="flex items-center gap-2 mb-1.5">
+                                    <span className="text-2xl">⚖️</span>
+                                    <p className="text-white font-bold text-sm group-hover:text-purple-400 transition-colors">平衡測試</p>
+                                </div>
+                                <p className="text-[11px] text-slate-500 leading-tight">
+                                    三階段闖關：並排→半並排→直線
+                                </p>
+                            </button>
+                        </div>
+                        <div className="flex items-center gap-2 my-3">
+                            <div className="flex-1 h-px bg-white/10" />
+                            <span className="text-xs text-slate-600">或手動輸入分數</span>
+                            <div className="flex-1 h-px bg-white/10" />
+                        </div>
+                    </div>
+                )}
+
+                {/* 欄位輸入 */}
                 <div className="space-y-4">
                     {config.fields.map(field => (
                         <div key={field.key}>
@@ -200,11 +272,11 @@ function SecondaryContent() {
                                     min={field.min}
                                     max={field.max}
                                     className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white text-lg focus:border-primary-500 focus:outline-none"
-                                    placeholder={`輸入分數`}
+                                    placeholder="輸入分數"
                                 />
                             ) : (
                                 <textarea
-                                    value={formData[field.key] || ''}
+                                    value={(formData[field.key] as string) || ''}
                                     onChange={e => setFormData(prev => ({ ...prev, [field.key]: e.target.value }))}
                                     className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white text-base focus:border-primary-500 focus:outline-none resize-none"
                                     rows={3}
@@ -217,7 +289,7 @@ function SecondaryContent() {
                                 <div className="mt-2">
                                     {(() => {
                                         const threshold = SECONDARY_THRESHOLDS[field.key]
-                                        const val = formData[field.key]
+                                        const val = formData[field.key] as number
                                         const isAbnormal = threshold.operator === '>='
                                             ? val >= threshold.value
                                             : val <= threshold.value
