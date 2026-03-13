@@ -120,8 +120,8 @@ export default function DashboardLayout({
                             </div>
                         )}
                         <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-white truncate">{profile?.full_name || '指導員'}</p>
-                            <p className="text-xs text-slate-500 truncate">{profile?.email}</p>
+                            <p className="text-sm font-medium text-white truncate">{profile?.full_name || user?.user_metadata?.full_name || '指導員'}</p>
+                            <p className="text-xs text-slate-500 truncate">{profile?.email || user?.email}</p>
                         </div>
                     </div>
                     <button
