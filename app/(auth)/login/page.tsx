@@ -7,6 +7,8 @@ import { useEffect, useState } from 'react'
 export default function LoginPage() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
+    const [agreed, setAgreed] = useState(false)
+    const [showDisclaimer, setShowDisclaimer] = useState(false)
     const router = useRouter()
 
     useEffect(() => {
@@ -19,6 +21,11 @@ export default function LoginPage() {
     }, [])
 
     const handleGoogleLogin = async () => {
+        if (!agreed) {
+            setError('請先閱讀並同意免責聲明與服務條款')
+            return
+        }
+
         setLoading(true)
         setError(null)
         const supabase = createClient()
@@ -65,7 +72,7 @@ export default function LoginPage() {
                 </div>
 
                 {/* Features */}
-                <div className="space-y-3 mb-8">
+                <div className="space-y-3 mb-6">
                     {[
                         { icon: '🤖', text: 'AI 姿勢即時分析' },
                         { icon: '📊', text: '前後測數據對比' },
@@ -78,6 +85,35 @@ export default function LoginPage() {
                     ))}
                 </div>
 
+                {/* 免責聲明勾選 */}
+                <div className="mb-5 space-y-3">
+                    <div className="flex items-start gap-3">
+                        <input
+                            type="checkbox"
+                            id="agree-terms"
+                            checked={agreed}
+                            onChange={e => {
+                                setAgreed(e.target.checked)
+                                if (e.target.checked) setError(null)
+                            }}
+                            className="mt-1 w-4 h-4 rounded border-white/20 bg-white/5 text-primary-500 focus:ring-primary-500 focus:ring-offset-0 cursor-pointer shrink-0"
+                        />
+                        <label htmlFor="agree-terms" className="text-xs text-slate-400 leading-relaxed cursor-pointer">
+                            我已閱讀並同意
+                            <button
+                                type="button"
+                                onClick={() => setShowDisclaimer(true)}
+                                className="text-primary-400 hover:underline mx-0.5"
+                            >
+                                免責聲明
+                            </button>、
+                            <a href="/terms" target="_blank" className="text-primary-400 hover:underline">服務條款</a>
+                            及
+                            <a href="/privacy" target="_blank" className="text-primary-400 hover:underline">隱私權政策</a>
+                        </label>
+                    </div>
+                </div>
+
                 {/* Error message */}
                 {error && (
                     <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
@@ -88,8 +124,8 @@ export default function LoginPage() {
                 {/* Google Login Button */}
                 <button
                     onClick={handleGoogleLogin}
-                    disabled={loading}
-                    className="btn-google w-full justify-center text-base disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={loading || !agreed}
+                    className={`btn-google w-full justify-center text-base disabled:cursor-not-allowed transition-all ${!agreed ? 'opacity-40' : loading ? 'opacity-50' : ''}`}
                 >
                     {loading ? (
                         <div className="w-5 h-5 border-2 border-slate-300 border-t-transparent rounded-full animate-spin" />
@@ -108,6 +144,80 @@ export default function LoginPage() {
                     首次登入將自動註冊帳號
                 </p>
             </div>
+
+            {/* ============================================================ */}
+            {/* 免責聲明彈窗 */}
+            {/* ============================================================ */}
+            {showDisclaimer && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+                    <div className="glass-card p-6 md:p-8 w-full max-w-lg max-h-[85vh] overflow-y-auto space-y-5">
+                        <div className="flex items-center justify-between">
+                            <h2 className="text-xl font-bold text-white">⚠️ 免責聲明</h2>
+                            <button
+                                onClick={() => setShowDisclaimer(false)}
+                                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/20 transition-colors"
+                                title="關閉"
+                            >
+                                ✕
+                            </button>
+                        </div>
+
+                        <div className="space-y-4 text-sm text-slate-300 leading-relaxed">
+                            <section>
+                                <h3 className="font-semibold text-white mb-2">一、系統用途與限制</h3>
+                                <p>本系統（「惠生 ICOPE & 地板滾球檢測平台」）提供之 AI 動作分析、SPPB 評估及 ICOPE 檢測功能，僅作為輔助篩檢與參考工具，<strong className="text-amber-400">不構成醫療診斷、治療建議或專業醫療意見</strong>。</p>
+                            </section>
+
+                            <section>
+                                <h3 className="font-semibold text-white mb-2">二、AI 分析結果聲明</h3>
+                                <ul className="list-disc pl-5 space-y-1">
+                                    <li>AI 骨架偵測與角度計算受環境光線、拍攝角度、衣著及個人體型影響，結果可能存在誤差。</li>
+                                    <li>系統自動判定之分數與評級僅供參考，應由具專業資格之醫事人員或運動指導員進行最終判斷。</li>
+                                    <li>本系統不保證分析結果之完全正確性與即時性。</li>
+                                </ul>
+                            </section>
+
+                            <section>
+                                <h3 className="font-semibold text-white mb-2">三、使用者責任</h3>
+                                <ul className="list-disc pl-5 space-y-1">
+                                    <li>使用者應確保受測長者之身體狀況適合進行相關測試，並採取必要之安全防護措施（例如：椅子起站測試時需有人在旁看護）。</li>
+                                    <li>使用者應依專業判斷決定是否採納系統之分析結果，不得完全依賴本系統之自動判定。</li>
+                                    <li>使用者應善盡個人資料保護義務，妥善管理帳號權限並避免資料外洩。</li>
+                                </ul>
+                            </section>
+
+                            <section>
+                                <h3 className="font-semibold text-white mb-2">四、損害賠償免責</h3>
+                                <p>惠生長照事業有限公司及其開發團隊，對於因使用或無法使用本系統而直接或間接造成之任何損害（包括但不限於人身傷害、資料遺失、業務損失），不負任何賠償責任。</p>
+                            </section>
+
+                            <section>
+                                <h3 className="font-semibold text-white mb-2">五、隱私與資料安全</h3>
+                                <p>相機畫面僅於使用者裝置端即時處理，不會上傳至伺服器。評估資料儲存於雲端資料庫並受 RLS（Row Level Security）保護。詳細資料處理方式請參閱<a href="/privacy" target="_blank" className="text-primary-400 hover:underline">隱私權政策</a>。</p>
+                            </section>
+                        </div>
+
+                        <div className="pt-3 border-t border-white/10 flex gap-3">
+                            <button
+                                onClick={() => setShowDisclaimer(false)}
+                                className="flex-1 py-3 rounded-xl bg-white/5 text-slate-400 font-medium hover:bg-white/10 transition-colors"
+                            >
+                                關閉
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setAgreed(true)
+                                    setShowDisclaimer(false)
+                                    setError(null)
+                                }}
+                                className="flex-1 py-3 rounded-xl bg-primary-600 text-white font-bold hover:bg-primary-500 transition-colors"
+                            >
+                                ✓ 我已閱讀並同意
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
