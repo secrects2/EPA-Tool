@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/client'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import toast from 'react-hot-toast'
 
 interface Elder {
@@ -22,6 +23,14 @@ export default function EldersPage() {
     const [formData, setFormData] = useState({ name: '', gender: 'male', birth_date: '', notes: '' })
     const [submitting, setSubmitting] = useState(false)
     const [searchTerm, setSearchTerm] = useState('')
+    const searchParams = useSearchParams()
+
+    // 當 URL 帶有 ?add=true 時自動展開新增表單
+    useEffect(() => {
+        if (searchParams.get('add') === 'true') {
+            setShowForm(true)
+        }
+    }, [searchParams])
 
     const fetchElders = async () => {
         const supabase = createClient()

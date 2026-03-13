@@ -67,7 +67,7 @@ export default function DashboardPage() {
                     <h1 className="text-2xl font-bold text-white">儀表板</h1>
                     <p className="text-slate-400 text-sm mt-1">歡迎回來，查看您的數據概覽</p>
                 </div>
-                <Link href="/elders" className="btn-primary text-center text-sm">
+                <Link href="/elders?add=true" className="btn-primary text-center text-sm">
                     + 新增長輩
                 </Link>
             </div>
