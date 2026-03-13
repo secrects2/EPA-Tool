@@ -12,7 +12,7 @@
  * 3. 批量多次訓練數據匯出
  */
 
-import type { BiomechanicsMetrics } from './biomechanics-engine'
+import type { BiomechanicsMetrics } from '../analysis/biomechanics-engine'
 
 // ============================================================================
 // CSV 导出

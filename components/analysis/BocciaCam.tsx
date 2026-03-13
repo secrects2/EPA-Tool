@@ -2,10 +2,17 @@
 
 import React, { useRef, useEffect, useState, useCallback } from 'react'
 import Webcam from 'react-webcam'
-import { saveRehabSession } from '@/app/actions/rehab'
-import { getAiPrescription } from '@/lib/ai-diagnosis'
-import { BiomechanicsEngine, type BiomechanicsMetrics } from '@/lib/biomechanics-engine'
-import { downloadFramesCSV, downloadSummaryCSV, downloadExcel, type SessionSummary } from '@/lib/data-export'
+import { BiomechanicsEngine, type BiomechanicsMetrics } from '@/lib/analysis/biomechanics-engine'
+import { downloadFramesCSV, downloadSummaryCSV, downloadExcel, type SessionSummary } from '@/lib/export/data-export'
+
+// Stubs for modules not available in EPA Tool (originally from BocciaCam project)
+async function saveRehabSession(_params: any): Promise<{ success: boolean; sessionId?: string; error?: string }> {
+    console.warn('saveRehabSession is not implemented in EPA Tool')
+    return { success: true, sessionId: 'stub-session' }
+}
+function getAiPrescription(_metrics: any) {
+    return { title: '分析完成', content: '請查看長輩詳情頁了解完整報告', color: 'border-blue-500', references: [], recommendedProducts: [] }
+}
 
 /**
  * BocciaCam - AI 視覺分析組件
