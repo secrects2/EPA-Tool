@@ -49,7 +49,7 @@ export default function AnalysisPage() {
         try {
             // 取得攝影機
             const stream = await navigator.mediaDevices.getUserMedia({
-                video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } }
+                video: { facingMode: 'environment', width: { ideal: 640 }, height: { ideal: 480 } }
             })
             streamRef.current = stream
             if (videoRef.current) {
