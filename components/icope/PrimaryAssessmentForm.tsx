@@ -8,6 +8,10 @@ import { useRouter } from 'next/navigation'
 import { useState, useMemo } from 'react'
 import toast from 'react-hot-toast'
 import { logActivity } from '@/lib/activity-log'
+import dynamic from 'next/dynamic'
+
+// 動態載入 AI 相機元件
+const ChairStandCamera = dynamic(() => import('@/components/icope/ChairStandCamera'), { ssr: false })
 
 // ============================================================================
 // Zod Schema — 初評 6 大面向
@@ -175,6 +179,8 @@ export default function PrimaryAssessmentForm({
 }: PrimaryAssessmentFormProps) {
     const router = useRouter()
     const [submitting, setSubmitting] = useState(false)
+    const [aiCameraOpen, setAiCameraOpen] = useState(false)
+    const [aiMobilityResult, setAiMobilityResult] = useState<{ time: number; score: number } | null>(null)
 
     const { register, handleSubmit, control, setValue, formState: { errors } } = useForm<PrimaryAssessmentValues>({
         resolver: zodResolver(primaryAssessmentSchema),
@@ -287,6 +293,17 @@ export default function PrimaryAssessmentForm({
         }
     }
 
+    // AI 測試全螢幕模式
+    if (aiCameraOpen) {
+        return (
+            <ChairStandCamera
+                assessmentId="primary-preview"
+                patientName={patientName}
+                onClose={() => setAiCameraOpen(false)}
+            />
+        )
+    }
+
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Header */}
@@ -312,8 +329,8 @@ export default function PrimaryAssessmentForm({
                     <div
                         key={domain.key}
                         className={`glass-card p-5 transition-all duration-300 ${isAbnormal
-                                ? 'ring-2 ring-red-500/40 bg-red-500/5'
-                                : ''
+                            ? 'ring-2 ring-red-500/40 bg-red-500/5'
+                            : ''
                             }`}
                     >
                         {/* 面向標題 */}
@@ -325,8 +342,8 @@ export default function PrimaryAssessmentForm({
                             </div>
                             {/* 狀態徽章 */}
                             <span className={`shrink-0 px-3 py-1 rounded-full text-xs font-bold ${isAbnormal
-                                    ? 'bg-red-500/20 text-red-400 border border-red-500/30'
-                                    : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/20'
+                                ? 'bg-red-500/20 text-red-400 border border-red-500/30'
+                                : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/20'
                                 }`}>
                                 {isAbnormal ? '⚠️ 異常' : '✓ 正常'}
                             </span>
@@ -350,14 +367,43 @@ export default function PrimaryAssessmentForm({
                             </ul>
                         </div>
 
+                        {/* AI 測試入口（僅 mobility） */}
+                        {domain.key === 'mobility' && (
+                            <div className="mb-4">
+                                <button
+                                    type="button"
+                                    onClick={() => setAiCameraOpen(true)}
+                                    className="w-full p-4 rounded-xl bg-blue-500/10 border-2 border-blue-500/25 hover:border-blue-500/50 hover:bg-blue-500/20 transition-all text-left group"
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-3xl">📸</span>
+                                        <div className="flex-1">
+                                            <p className="text-white font-bold group-hover:text-blue-400 transition-colors">AI 視覺測試 — 椅子起站</p>
+                                            <p className="text-xs text-slate-500 mt-0.5">
+                                                使用手機後鏡頭自動計算起立坐下 5 次並計時
+                                            </p>
+                                        </div>
+                                        <span className="text-slate-600 group-hover:text-blue-400 transition-colors">→</span>
+                                    </div>
+                                </button>
+                                {aiMobilityResult && (
+                                    <div className="mt-2 flex items-center gap-2 text-sm">
+                                        <span className={aiMobilityResult.time > 12 ? 'text-red-400' : 'text-emerald-400'}>
+                                            {aiMobilityResult.time > 12 ? '⚠️' : '✓'} AI 測試結果：{aiMobilityResult.time}秒（{aiMobilityResult.score}分）
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
                         {/* 判定按鈕 */}
                         <div className="flex gap-3">
                             <button
                                 type="button"
                                 onClick={() => setValue(domain.key, false)}
                                 className={`flex-1 py-3 px-4 rounded-xl text-base font-medium transition-all ${!isAbnormal
-                                        ? 'bg-emerald-500/20 text-emerald-400 border-2 border-emerald-500/40 shadow-lg shadow-emerald-500/10'
-                                        : 'bg-white/5 text-slate-500 border-2 border-transparent hover:bg-white/10'
+                                    ? 'bg-emerald-500/20 text-emerald-400 border-2 border-emerald-500/40 shadow-lg shadow-emerald-500/10'
+                                    : 'bg-white/5 text-slate-500 border-2 border-transparent hover:bg-white/10'
                                     }`}
                             >
                                 ✓ {domain.normalLabel}
@@ -366,8 +412,8 @@ export default function PrimaryAssessmentForm({
                                 type="button"
                                 onClick={() => setValue(domain.key, true)}
                                 className={`flex-1 py-3 px-4 rounded-xl text-base font-medium transition-all ${isAbnormal
-                                        ? 'bg-red-500/20 text-red-400 border-2 border-red-500/40 shadow-lg shadow-red-500/10'
-                                        : 'bg-white/5 text-slate-500 border-2 border-transparent hover:bg-white/10'
+                                    ? 'bg-red-500/20 text-red-400 border-2 border-red-500/40 shadow-lg shadow-red-500/10'
+                                    : 'bg-white/5 text-slate-500 border-2 border-transparent hover:bg-white/10'
                                     }`}
                             >
                                 ⚠️ {domain.abnormalLabel}
