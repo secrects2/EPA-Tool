@@ -13,6 +13,9 @@ interface Elder {
     gender: string | null
     birth_date: string | null
     notes: string | null
+    id_number: string | null
+    phone: string | null
+    chronic_diseases: string[] | null
     created_at: string
     session_count?: number
 }
@@ -21,7 +24,7 @@ export default function EldersPage() {
     const [elders, setElders] = useState<Elder[]>([])
     const [loading, setLoading] = useState(true)
     const [showForm, setShowForm] = useState(false)
-    const [formData, setFormData] = useState({ name: '', gender: 'male', birth_date: '', notes: '' })
+    const [formData, setFormData] = useState({ name: '', gender: 'male', birth_date: '', notes: '', id_number: '', phone: '', chronic_diseases_input: '' })
     const [submitting, setSubmitting] = useState(false)
     const [searchTerm, setSearchTerm] = useState('')
     const searchParams = useSearchParams()
@@ -61,27 +64,64 @@ export default function EldersPage() {
             toast.error('請輸入姓名')
             return
         }
+        if (!formData.id_number.trim()) {
+            toast.error('請輸入身分證字號')
+            return
+        }
         setSubmitting(true)
         const supabase = createClient()
         const { data: { user } } = await supabase.auth.getUser()
-        if (!user) return
+        if (!user) { setSubmitting(false); return }
 
-        const { error } = await supabase.from('elders').insert({
-            instructor_id: user.id,
-            name: formData.name.trim(),
-            gender: formData.gender || null,
-            birth_date: formData.birth_date || null,
-            notes: formData.notes.trim() || null,
-        })
+        const chronicArr = formData.chronic_diseases_input
+            .split(/[,，、]/)  // 支援逗號、頓號分隔
+            .map(s => s.trim())
+            .filter(Boolean)
 
-        if (error) {
-            toast.error('新增失敗: ' + error.message)
-        } else {
-            toast.success('長輩新增成功！')
-            logActivity('新增長輩', `姓名: ${formData.name.trim()}`, 'elder')
-            setFormData({ name: '', gender: 'male', birth_date: '', notes: '' })
+        try {
+            // 1. 寫入 elders 表（AI 分析用）
+            const { data: elderData, error: elderErr } = await supabase
+                .from('elders')
+                .insert({
+                    instructor_id: user.id,
+                    name: formData.name.trim(),
+                    gender: formData.gender || null,
+                    birth_date: formData.birth_date || null,
+                    notes: formData.notes.trim() || null,
+                })
+                .select('id')
+                .single()
+
+            if (elderErr) throw new Error(elderErr.message)
+
+            // 2. 同步寫入 patients 表（ICOPE 用）
+            const { error: patientErr } = await supabase
+                .from('patients')
+                .insert({
+                    instructor_id: user.id,
+                    id_number: formData.id_number.trim(),
+                    name: formData.name.trim(),
+                    gender: formData.gender || 'male',
+                    birth_date: formData.birth_date || new Date().toISOString().slice(0, 10),
+                    phone: formData.phone.trim() || null,
+                    chronic_diseases: chronicArr.length > 0 ? chronicArr : [],
+                    notes: formData.notes.trim() || null,
+                })
+
+            if (patientErr) {
+                // patients 寫入失敗（可能是身分證重複），但 elders 已成功
+                console.warn('patients 寫入失敗:', patientErr.message)
+                toast.success('長輩新增成功！（ICOPE 資料同步失敗：' + patientErr.message + '）')
+            } else {
+                toast.success('長輩新增成功！')
+            }
+
+            logActivity('新增長輩', `姓名: ${formData.name.trim()}, 身分證: ${formData.id_number.trim()}`, 'elder')
+            setFormData({ name: '', gender: 'male', birth_date: '', notes: '', id_number: '', phone: '', chronic_diseases_input: '' })
             setShowForm(false)
             fetchElders()
+        } catch (err: any) {
+            toast.error('新增失敗: ' + err.message)
         }
         setSubmitting(false)
     }
@@ -120,11 +160,24 @@ export default function EldersPage() {
                             />
                         </div>
                         <div>
+                            <label className="block text-sm text-slate-400 mb-1">身分證字號 *</label>
+                            <input
+                                type="text"
+                                value={formData.id_number}
+                                onChange={e => setFormData({ ...formData, id_number: e.target.value.toUpperCase() })}
+                                className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:border-primary-500 focus:outline-none transition-colors font-mono"
+                                placeholder="例：A123456789"
+                                required
+                                maxLength={10}
+                            />
+                        </div>
+                        <div>
                             <label className="block text-sm text-slate-400 mb-1">性別</label>
                             <select
                                 value={formData.gender}
                                 onChange={e => setFormData({ ...formData, gender: e.target.value })}
                                 className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white focus:border-primary-500 focus:outline-none transition-colors"
+                                title="性別"
                             >
                                 <option value="male">男</option>
                                 <option value="female">女</option>
@@ -140,6 +193,26 @@ export default function EldersPage() {
                             />
                         </div>
                         <div>
+                            <label className="block text-sm text-slate-400 mb-1">手機號碼</label>
+                            <input
+                                type="tel"
+                                value={formData.phone}
+                                onChange={e => setFormData({ ...formData, phone: e.target.value })}
+                                className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:border-primary-500 focus:outline-none transition-colors"
+                                placeholder="例：0912345678"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm text-slate-400 mb-1">慢性疾病史</label>
+                            <input
+                                type="text"
+                                value={formData.chronic_diseases_input}
+                                onChange={e => setFormData({ ...formData, chronic_diseases_input: e.target.value })}
+                                className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:border-primary-500 focus:outline-none transition-colors"
+                                placeholder="以頓號分隔，例：高血壓、糖尿病"
+                            />
+                        </div>
+                        <div className="sm:col-span-2">
                             <label className="block text-sm text-slate-400 mb-1">備註</label>
                             <input
                                 type="text"
@@ -203,6 +276,7 @@ export default function EldersPage() {
                                         <p className="text-xs text-slate-500">
                                             {elder.gender === 'female' ? '女' : '男'}
                                             {elder.birth_date && ` · ${elder.birth_date}`}
+                                            {elder.id_number && ` · ${elder.id_number}`}
                                         </p>
                                     </div>
                                 </div>
