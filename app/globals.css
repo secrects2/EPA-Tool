@@ -21,6 +21,7 @@ body {
   background: var(--gradient-dark);
   color: #e2e8f0;
   min-height: 100vh;
+  overscroll-behavior-y: none;
 }
 
 /* Glass morphism card */
@@ -98,6 +99,7 @@ body {
 /* Smooth scroll */
 html {
   scroll-behavior: smooth;
+  overscroll-behavior-y: none;
 }
 
 /* Custom scrollbar */

@@ -34,9 +34,11 @@ export default function PullToRefresh({ children }: { children: React.ReactNode 
         const currentY = e.touches[0].clientY
         const diff = currentY - startYRef.current
         if (diff > 0) {
+            // 立即攔截下拉手勢，避免 LINE WebView 搶走事件
+            e.preventDefault()
+            e.stopPropagation()
             const distance = Math.min(diff * 0.5, MAX_PULL)
             setPullDistance(distance)
-            if (distance > 10) e.preventDefault()
         }
     }, [pulling, refreshing])
 
