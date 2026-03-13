@@ -3,8 +3,8 @@ import './globals.css'
 import { Toaster } from 'react-hot-toast'
 
 export const metadata: Metadata = {
-    title: 'EPA Tool - 地板滾球 AI 動作分析系統',
-    description: '運動指導員專用的 AI 姿勢分析與前後測數據管理平台',
+    title: '惠生ICOPE&地板滾球檢測平台',
+    description: '惠生長照 ICOPE 前後測系統與地板滾球 AI 動作分析平台',
 }
 
 export default function RootLayout({

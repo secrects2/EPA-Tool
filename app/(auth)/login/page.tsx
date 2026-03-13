@@ -54,10 +54,10 @@ export default function LoginPage() {
                         </svg>
                     </div>
                     <h1 className="text-2xl font-bold text-white mb-2">
-                        EPA Tool
+                        惠生檢測平台
                     </h1>
                     <p className="text-slate-400 text-sm">
-                        地板滾球 AI 動作分析系統
+                        ICOPE & 地板滾球 AI 檢測系統
                     </p>
                     <p className="text-slate-500 text-xs mt-1">
                         運動指導員專用平台

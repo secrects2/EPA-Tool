@@ -90,8 +90,8 @@ export default function DashboardLayout({
                             E
                         </div>
                         <div>
-                            <h1 className="font-bold text-white text-lg">EPA Tool</h1>
-                            <p className="text-xs text-slate-500">AI 動作分析</p>
+                            <h1 className="font-bold text-white text-sm leading-tight">惠生檢測平台</h1>
+                            <p className="text-xs text-slate-500">ICOPE & 地板滾球</p>
                         </div>
                     </div>
                 </div>
@@ -144,13 +144,32 @@ export default function DashboardLayout({
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
-                    <span className="font-bold text-white">EPA Tool</span>
+                    <span className="font-bold text-white text-sm">惠生檢測平台</span>
                     <div className="w-8" />
                 </header>
 
                 <div className="p-4 md:p-6 lg:p-8">
                     {children}
                 </div>
+
+                {/* Footer */}
+                <footer className="border-t border-white/5 px-4 md:px-6 lg:px-8 py-6 mt-8">
+                    <div className="max-w-4xl mx-auto">
+                        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600">
+                            <p>© {new Date().getFullYear()} 惠生長照事業有限公司 版權所有</p>
+                            <div className="flex items-center gap-4">
+                                <a href="/privacy" className="hover:text-slate-400 transition-colors">隱私權政策</a>
+                                <span>·</span>
+                                <a href="/terms" className="hover:text-slate-400 transition-colors">服務條款</a>
+                                <span>·</span>
+                                <a href="/contact" className="hover:text-slate-400 transition-colors">聯絡我們</a>
+                            </div>
+                        </div>
+                        <p className="text-center text-[10px] text-slate-700 mt-2">
+                            本系統依據台灣衛生福利部 ICOPE 標準設計，僅供專業人員使用
+                        </p>
+                    </div>
+                </footer>
             </main>
         </div>
     )
