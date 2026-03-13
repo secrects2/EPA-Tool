@@ -60,6 +60,7 @@ export default function DashboardLayout({
         { href: '/elders', label: '長輩管理', icon: '👥' },
         { href: '/icope', label: 'ICOPE 評估', icon: '📋' },
         { href: '/analysis', label: '地板滾球分析', icon: '🎳' },
+        { href: '/ai-lab', label: 'AI 分析測試區', icon: '🧪' },
         ...(profile?.role === 'admin' ? [{ href: '/admin', label: '管理員', icon: '🔑' }] : []),
     ]
 

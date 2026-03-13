@@ -1,45 +1,45 @@
 export default function TermsPage() {
     return (
         <div className="max-w-3xl mx-auto py-12 px-6 text-slate-300 space-y-8">
-            <h1 className="text-3xl font-bold text-white">服务条款</h1>
-            <p className="text-sm text-slate-500">最后更新日期：2026 年 3 月</p>
+            <h1 className="text-3xl font-bold text-white">服務條款</h1>
+            <p className="text-sm text-slate-500">最後更新日期：2026 年 3 月</p>
 
             <section className="space-y-3">
-                <h2 className="text-xl font-semibold text-white">一、服务说明</h2>
-                <p>「惠生 ICOPE & 地板滚球检测平台」（以下称本系统）由惠生长照事业有限公司开发与营运，提供 ICOPE 长者内在能力前后测评估及地板滚球 AI 动作分析服务。</p>
+                <h2 className="text-xl font-semibold text-white">一、服務說明</h2>
+                <p>「惠生 ICOPE & 地板滾球檢測平台」（以下稱本系統）由惠生長照事業有限公司開發與營運，提供 ICOPE 長者內在能力前後測評估及地板滾球 AI 動作分析服務。</p>
             </section>
 
             <section className="space-y-3">
-                <h2 className="text-xl font-semibold text-white">二、使用资格</h2>
+                <h2 className="text-xl font-semibold text-white">二、使用資格</h2>
                 <ul className="list-disc pl-6 space-y-1 text-sm">
-                    <li>本系统仅供经授权之运动指导员、医事人员及系统管理员使用</li>
-                    <li>使用者须以 Google 帐号登入，并经管理员核准后方可使用</li>
-                    <li>使用者应妥善保管帐号资讯，不得转借他人</li>
+                    <li>本系統僅供經授權之運動指導員、醫事人員及系統管理員使用</li>
+                    <li>使用者須以 Google 帳號登入，並經管理員核准後方可使用</li>
+                    <li>使用者應妥善保管帳號資訊，不得轉借他人</li>
                 </ul>
             </section>
 
             <section className="space-y-3">
-                <h2 className="text-xl font-semibold text-white">三、使用规范</h2>
+                <h2 className="text-xl font-semibold text-white">三、使用規範</h2>
                 <ul className="list-disc pl-6 space-y-1 text-sm">
-                    <li>使用者应依据专业知识正确操作评估工具</li>
-                    <li>不得将系统中之个人资料作为评估以外之用途</li>
-                    <li>AI 分析结果仅供参考，不得取代专业医疗诊断</li>
-                    <li>不得尝试破解、反组译或干扰系统运作</li>
+                    <li>使用者應依據專業知識正確操作評估工具</li>
+                    <li>不得將系統中之個人資料作為評估以外之用途</li>
+                    <li>AI 分析結果僅供參考，不得取代專業醫療診斷</li>
+                    <li>不得嘗試破解、反組譯或干擾系統運作</li>
                 </ul>
             </section>
 
             <section className="space-y-3">
-                <h2 className="text-xl font-semibold text-white">四、免责声明</h2>
+                <h2 className="text-xl font-semibold text-white">四、免責聲明</h2>
                 <ul className="list-disc pl-6 space-y-1 text-sm">
-                    <li>本系统之 AI 分析结果仅供辅助参考，不构成医疗建议</li>
-                    <li>因不可抗力因素导致之服务中断，本公司不负损害赔偿责任</li>
-                    <li>使用者因违反本条款所生之损害，由使用者自行负责</li>
+                    <li>本系統之 AI 分析結果僅供輔助參考，不構成醫療建議</li>
+                    <li>因不可抗力因素導致之服務中斷，本公司不負損害賠償責任</li>
+                    <li>使用者因違反本條款所生之損害，由使用者自行負責</li>
                 </ul>
             </section>
 
             <section className="space-y-3">
-                <h2 className="text-xl font-semibold text-white">五、智慧财产权</h2>
-                <p className="text-sm">本系统之所有程式码、介面设计、AI 模型与相关技术均为惠生长照事业有限公司所有，未经书面同意不得复制、修改或散布。</p>
+                <h2 className="text-xl font-semibold text-white">五、智慧財產權</h2>
+                <p className="text-sm">本系統之所有程式碼、介面設計、AI 模型與相關技術均為惠生長照事業有限公司所有，未經書面同意不得複製、修改或散佈。</p>
             </section>
         </div>
     )

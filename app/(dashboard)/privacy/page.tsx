@@ -1,55 +1,55 @@
 export default function PrivacyPage() {
     return (
         <div className="max-w-3xl mx-auto py-12 px-6 text-slate-300 space-y-8">
-            <h1 className="text-3xl font-bold text-white">隐私权政策</h1>
-            <p className="text-sm text-slate-500">最后更新日期：2026 年 3 月</p>
+            <h1 className="text-3xl font-bold text-white">隱私權政策</h1>
+            <p className="text-sm text-slate-500">最後更新日期：2026 年 3 月</p>
 
             <section className="space-y-3">
-                <h2 className="text-xl font-semibold text-white">一、资料收集范围</h2>
-                <p>本系统为提供 ICOPE 长者内在能力检测与地板滚球 AI 动作分析服务，将收集以下个人资料：</p>
+                <h2 className="text-xl font-semibold text-white">一、資料蒐集範圍</h2>
+                <p>本系統為提供 ICOPE 長者內在能力檢測與地板滾球 AI 動作分析服務，將蒐集以下個人資料：</p>
                 <ul className="list-disc pl-6 space-y-1 text-sm">
-                    <li>长者基本资料（姓名、身份证字号、性别、出生日期、手机号码）</li>
-                    <li>健康评估资料（初评及复评量表结果、慢性疾病史）</li>
-                    <li>AI 动作分析资料（骨架关键点座标、评测分数）</li>
-                    <li>指导员帐号资讯（Google 帐号 Email、姓名）</li>
+                    <li>長者基本資料（姓名、身分證字號、性別、出生日期、手機號碼）</li>
+                    <li>健康評估資料（初評及複評量表結果、慢性疾病史）</li>
+                    <li>AI 動作分析資料（骨架關鍵點座標、評測分數）</li>
+                    <li>指導員帳號資訊（Google 帳號 Email、姓名）</li>
                 </ul>
             </section>
 
             <section className="space-y-3">
-                <h2 className="text-xl font-semibold text-white">二、资料使用目的</h2>
+                <h2 className="text-xl font-semibold text-white">二、資料使用目的</h2>
                 <ul className="list-disc pl-6 space-y-1 text-sm">
-                    <li>提供 ICOPE 前后测评估与追踪服务</li>
-                    <li>产生地板滚球 AI 动作分析报告</li>
-                    <li>汇出报帐资料供卫生局审核</li>
-                    <li>系统功能改善与服务品质提升</li>
+                    <li>提供 ICOPE 前後測評估與追蹤服務</li>
+                    <li>產生地板滾球 AI 動作分析報告</li>
+                    <li>匯出報帳資料供衛生局審核</li>
+                    <li>系統功能改善與服務品質提升</li>
                 </ul>
             </section>
 
             <section className="space-y-3">
-                <h2 className="text-xl font-semibold text-white">三、资料保护措施</h2>
+                <h2 className="text-xl font-semibold text-white">三、資料保護措施</h2>
                 <ul className="list-disc pl-6 space-y-1 text-sm">
-                    <li>所有资料储存于 Supabase 云端资料库，启用 Row Level Security (RLS)</li>
-                    <li>传输过程全程使用 HTTPS 加密</li>
-                    <li>仅授权之指导员与管理员可存取对应资料</li>
-                    <li>相机画面仅在装置端即时处理，不上传影像至伺服器</li>
+                    <li>所有資料儲存於 Supabase 雲端資料庫，啟用 Row Level Security (RLS)</li>
+                    <li>傳輸過程全程使用 HTTPS 加密</li>
+                    <li>僅授權之指導員與管理員可存取對應資料</li>
+                    <li>相機畫面僅在裝置端即時處理，不上傳影像至伺服器</li>
                 </ul>
             </section>
 
             <section className="space-y-3">
-                <h2 className="text-xl font-semibold text-white">四、当事人权利</h2>
-                <p>依据《个人资料保护法》，您得行使以下权利：</p>
+                <h2 className="text-xl font-semibold text-white">四、當事人權利</h2>
+                <p>依據《個人資料保護法》，您得行使以下權利：</p>
                 <ul className="list-disc pl-6 space-y-1 text-sm">
-                    <li>查询或请求阅览个人资料</li>
-                    <li>请求制给复制本</li>
-                    <li>请求补充或更正</li>
-                    <li>请求停止搜集、处理或利用</li>
-                    <li>请求删除</li>
+                    <li>查詢或請求閱覽個人資料</li>
+                    <li>請求製給複製本</li>
+                    <li>請求補充或更正</li>
+                    <li>請求停止蒐集、處理或利用</li>
+                    <li>請求刪除</li>
                 </ul>
             </section>
 
             <section className="space-y-3">
-                <h2 className="text-xl font-semibold text-white">五、联络方式</h2>
-                <p className="text-sm">如有任何隐私权相关问题，请联系惠生长照事业有限公司。</p>
+                <h2 className="text-xl font-semibold text-white">五、聯絡方式</h2>
+                <p className="text-sm">如有任何隱私權相關問題，請聯繫惠生長照事業有限公司。</p>
             </section>
         </div>
     )
