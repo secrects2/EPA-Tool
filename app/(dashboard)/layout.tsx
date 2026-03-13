@@ -5,6 +5,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import type { User } from '@supabase/supabase-js'
+import PullToRefresh from '@/components/ui/PullToRefresh'
 
 interface Profile {
     id: string
@@ -149,9 +150,11 @@ export default function DashboardLayout({
                     <div className="w-8" />
                 </header>
 
-                <div className="p-4 md:p-6 lg:p-8">
-                    {children}
-                </div>
+                <PullToRefresh>
+                    <div className="p-4 md:p-6 lg:p-8">
+                        {children}
+                    </div>
+                </PullToRefresh>
 
                 {/* Footer */}
                 <footer className="border-t border-white/5 px-4 md:px-6 lg:px-8 py-6 mt-8">
