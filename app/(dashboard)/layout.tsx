@@ -12,6 +12,7 @@ interface Profile {
     email: string
     avatar_url: string | null
     organization: string | null
+    role: string | null
 }
 
 export default function DashboardLayout({
@@ -57,6 +58,7 @@ export default function DashboardLayout({
     const navItems = [
         { href: '/dashboard', label: '儀表板', icon: '📊' },
         { href: '/elders', label: '長輩管理', icon: '👥' },
+        ...(profile?.role === 'admin' ? [{ href: '/admin', label: '管理員', icon: '🔑' }] : []),
     ]
 
     if (!user) {

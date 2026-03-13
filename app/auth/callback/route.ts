@@ -45,6 +45,8 @@ export async function GET(request: Request) {
                     email: data.user.email || '',
                     avatar_url: data.user.user_metadata?.avatar_url || null,
                     organization: null,
+                    role: 'instructor',
+                    is_active: true,
                 })
             }
 

@@ -11,7 +11,9 @@ export default function LoginPage() {
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search)
-        if (params.get('error')) {
+        if (params.get('error') === 'account_disabled') {
+            setError('您的帳號已被管理員停用，請聯絡管理員')
+        } else if (params.get('error')) {
             setError('登入失敗，請重試')
         }
     }, [])
