@@ -54,6 +54,8 @@ CREATE TABLE IF NOT EXISTS assessments (
   instructor_id UUID NOT NULL REFERENCES profiles(id),
   stage assessment_stage NOT NULL DEFAULT 'initial',
   assessed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  follow_up_completed BOOLEAN NOT NULL DEFAULT false,
+  post_test_completed BOOLEAN NOT NULL DEFAULT false,
   notes TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
