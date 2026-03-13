@@ -6,6 +6,8 @@ import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 import { logActivity } from '@/lib/activity-log'
+import AnalysisReport from '@/components/analysis/AnalysisReport'
+import { type AnalysisMetrics } from '@/lib/analysis/ai-prescription'
 
 interface Elder {
     id: string
@@ -41,6 +43,7 @@ export default function ElderDetailPage() {
     const [loading, setLoading] = useState(true)
     const [expandedSession, setExpandedSession] = useState<string | null>(null)
     const [exporting, setExporting] = useState(false)
+    const [reportSession, setReportSession] = useState<Session | null>(null)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -231,35 +234,43 @@ export default function ElderDetailPage() {
                                     <span className="text-slate-500">{expandedSession === session.id ? '▲' : '▼'}</span>
                                 </button>
                                 {expandedSession === session.id && (
-                                    <div className="px-4 pb-4 grid grid-cols-2 sm:grid-cols-3 gap-3 text-sm">
-                                        <div className="p-2 rounded-lg bg-white/5">
-                                            <p className="text-xs text-slate-500">肘ROM</p>
-                                            <p className="text-white font-medium">{session.avg_elbow_rom?.toFixed(1) ?? '--'}°</p>
+                                    <div className="px-4 pb-4 space-y-3">
+                                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-sm">
+                                            <div className="p-2 rounded-lg bg-white/5">
+                                                <p className="text-xs text-slate-500">肘ROM</p>
+                                                <p className="text-white font-medium">{session.avg_elbow_rom?.toFixed(1) ?? '--'}°</p>
+                                            </div>
+                                            <div className="p-2 rounded-lg bg-white/5">
+                                                <p className="text-xs text-slate-500">肩ROM</p>
+                                                <p className="text-white font-medium">{session.avg_shoulder_rom?.toFixed(1) ?? '--'}°</p>
+                                            </div>
+                                            <div className="p-2 rounded-lg bg-white/5">
+                                                <p className="text-xs text-slate-500">核心穩定性</p>
+                                                <p className="text-white font-medium">{session.avg_core_stability?.toFixed(1) ?? '--'}°</p>
+                                            </div>
+                                            <div className="p-2 rounded-lg bg-white/5">
+                                                <p className="text-xs text-slate-500">軀幹傾斜</p>
+                                                <p className="text-white font-medium">{session.avg_trunk_tilt?.toFixed(1) ?? '--'}°</p>
+                                            </div>
+                                            <div className="p-2 rounded-lg bg-white/5">
+                                                <p className="text-xs text-slate-500">震顫</p>
+                                                <p className={`font-medium ${session.tremor_detected ? 'text-amber-400' : 'text-emerald-400'}`}>
+                                                    {session.tremor_detected ? '檢測到' : '未檢測到'}
+                                                </p>
+                                            </div>
+                                            <div className="p-2 rounded-lg bg-white/5">
+                                                <p className="text-xs text-slate-500">代償動作</p>
+                                                <p className={`font-medium ${session.compensation_detected ? 'text-amber-400' : 'text-emerald-400'}`}>
+                                                    {session.compensation_detected ? '檢測到' : '未檢測到'}
+                                                </p>
+                                            </div>
                                         </div>
-                                        <div className="p-2 rounded-lg bg-white/5">
-                                            <p className="text-xs text-slate-500">肩ROM</p>
-                                            <p className="text-white font-medium">{session.avg_shoulder_rom?.toFixed(1) ?? '--'}°</p>
-                                        </div>
-                                        <div className="p-2 rounded-lg bg-white/5">
-                                            <p className="text-xs text-slate-500">核心穩定性</p>
-                                            <p className="text-white font-medium">{session.avg_core_stability?.toFixed(1) ?? '--'}°</p>
-                                        </div>
-                                        <div className="p-2 rounded-lg bg-white/5">
-                                            <p className="text-xs text-slate-500">軀幹傾斜</p>
-                                            <p className="text-white font-medium">{session.avg_trunk_tilt?.toFixed(1) ?? '--'}°</p>
-                                        </div>
-                                        <div className="p-2 rounded-lg bg-white/5">
-                                            <p className="text-xs text-slate-500">震顫</p>
-                                            <p className={`font-medium ${session.tremor_detected ? 'text-amber-400' : 'text-emerald-400'}`}>
-                                                {session.tremor_detected ? '檢測到' : '未檢測到'}
-                                            </p>
-                                        </div>
-                                        <div className="p-2 rounded-lg bg-white/5">
-                                            <p className="text-xs text-slate-500">代償動作</p>
-                                            <p className={`font-medium ${session.compensation_detected ? 'text-amber-400' : 'text-emerald-400'}`}>
-                                                {session.compensation_detected ? '檢測到' : '未檢測到'}
-                                            </p>
-                                        </div>
+                                        <button
+                                            onClick={() => setReportSession(session)}
+                                            className="w-full py-3 rounded-xl bg-gradient-to-r from-primary-600 to-cyan-600 text-white font-bold text-sm hover:opacity-90 transition-opacity"
+                                        >
+                                            📊 查看完整 AI 分析報告
+                                        </button>
                                     </div>
                                 )}
                             </div>
@@ -267,6 +278,36 @@ export default function ElderDetailPage() {
                     </div>
                 )}
             </div>
+            {/* Full Report Overlay */}
+            {reportSession && (
+                <AnalysisReport
+                    metrics={{
+                        elbow_rom: reportSession.avg_elbow_rom ?? 0,
+                        trunk_stability: reportSession.avg_trunk_tilt ?? 0,
+                        avg_velocity: reportSession.avg_wrist_velocity ?? 0,
+                        max_rom: reportSession.avg_elbow_rom ?? 0,
+                        min_rom: reportSession.avg_elbow_rom ?? 0,
+                        avg_rom: reportSession.avg_elbow_rom ?? 0,
+                        avg_trunk_tilt: reportSession.avg_trunk_tilt ?? 0,
+                        throw_count: 0,
+                        stable_ratio: reportSession.avg_trunk_tilt != null ? Math.max(0, Math.round(100 - reportSession.avg_trunk_tilt * 3)) : 50,
+                        core_stability_angle: reportSession.avg_core_stability ?? null,
+                        avg_shoulder_angular_vel: reportSession.avg_shoulder_velocity ?? null,
+                        avg_elbow_angular_vel: reportSession.avg_elbow_velocity ?? null,
+                        avg_wrist_angular_vel: reportSession.avg_wrist_velocity ?? null,
+                        tremor_detected_ratio: reportSession.tremor_detected ? 25 : 0,
+                        tremor_avg_frequency: null,
+                        compensation_detected_ratio: reportSession.compensation_detected ? 30 : 0,
+                        compensation_types: reportSession.compensation_detected ? ['動作代償'] : [],
+                        posture_correction_avg: 0,
+                        manual_throw_count: 0,
+                    } as AnalysisMetrics}
+                    patientName={elder?.name}
+                    sessionDate={new Date(reportSession.created_at).toLocaleString('zh-TW')}
+                    durationSeconds={reportSession.duration_seconds ?? undefined}
+                    onClose={() => setReportSession(null)}
+                />
+            )}
         </div>
     )
 }

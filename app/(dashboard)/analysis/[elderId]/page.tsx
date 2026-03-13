@@ -316,8 +316,8 @@ export default function AnalysisPage() {
 
             {/* Video + Canvas */}
             <div className="relative glass-card overflow-hidden" style={{ minHeight: '45vh' }}>
-                <video ref={videoRef} className="w-full h-full object-cover" playsInline muted style={{ transform: 'scaleX(-1)' }} />
-                <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" style={{ transform: 'scaleX(-1)' }} />
+                <video ref={videoRef} className="w-full h-full object-cover" playsInline muted />
+                <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
 
                 {!isAnalyzing && !metrics && (
                     <div className="absolute inset-0 flex items-center justify-center bg-slate-900/80">
