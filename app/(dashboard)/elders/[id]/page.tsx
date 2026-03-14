@@ -117,14 +117,14 @@ export default function ElderDetailPage() {
         const isImproved = diff !== null ? (lowerBetter ? diff < 0 : diff > 0) : null
 
         return (
-            <div className="flex items-center justify-between py-2 border-b border-white/5 last:border-b-0">
-                <span className="text-sm text-slate-400">{label}</span>
+            <div className="flex items-center justify-between py-2 border-b border-[#eee] last:border-b-0">
+                <span className="text-sm text-[#666]">{label}</span>
                 <div className="flex items-center gap-4 text-sm">
                     <span className="text-slate-500">{pre !== null ? `${pre.toFixed(1)}${unit}` : '--'}</span>
                     <span className="text-slate-600">→</span>
-                    <span className="text-white font-medium">{post !== null ? `${post.toFixed(1)}${unit}` : '--'}</span>
+                    <span className="text-[#333] font-medium">{post !== null ? `${post.toFixed(1)}${unit}` : '--'}</span>
                     {diff !== null && (
-                        <span className={`px-2 py-0.5 rounded-lg text-xs font-medium ${isImproved ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}>
+                        <span className={`px-2 py-0.5 rounded-lg text-xs font-medium ${isImproved ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}`}>
                             {diff > 0 ? '+' : ''}{diff.toFixed(1)}{unit}
                         </span>
                     )}
@@ -138,7 +138,7 @@ export default function ElderDetailPage() {
     }
 
     if (!elder) {
-        return <div className="text-center py-20 text-slate-400">找不到此長輩資料</div>
+        return <div className="text-center py-20 text-[#666]">找不到此長輩資料</div>
     }
 
     return (
@@ -146,15 +146,15 @@ export default function ElderDetailPage() {
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div className="flex items-center gap-4">
-                    <button onClick={() => router.push('/elders')} className="text-slate-400 hover:text-white transition-colors">
+                    <button onClick={() => router.push('/elders')} className="text-[#666] hover:text-[#333] transition-colors">
                         ← 返回
                     </button>
                     <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl font-bold text-white ${elder.gender === 'female' ? 'bg-pink-600/60' : 'bg-blue-600/60'}`}>
                         {elder.name[0]}
                     </div>
                     <div>
-                        <h1 className="text-2xl font-bold text-white">{elder.name}</h1>
-                        <p className="text-sm text-slate-400">
+                        <h1 className="text-2xl font-bold text-[#333]">{elder.name}</h1>
+                        <p className="text-sm text-[#666]">
                             {elder.gender === 'female' ? '女' : '男'}
                             {elder.birth_date && ` · ${elder.birth_date}`}
                             {elder.notes && ` · ${elder.notes}`}
@@ -168,7 +168,7 @@ export default function ElderDetailPage() {
                     <button onClick={handleExportExcel} disabled={exporting} className="btn-primary text-sm disabled:opacity-50">
                         {exporting ? '匯出中...' : '📥 匯出 Excel'}
                     </button>
-                    <button onClick={handleDeleteElder} className="px-4 py-2.5 rounded-xl text-sm text-red-400 border border-red-500/20 hover:bg-red-500/10 transition-colors">
+                    <button onClick={handleDeleteElder} className="px-4 py-2.5 rounded-xl text-sm text-red-600 border border-red-200 hover:bg-red-500/10 transition-colors">
                         🗑 刪除
                     </button>
                 </div>
@@ -177,15 +177,15 @@ export default function ElderDetailPage() {
             {/* Pre-Post Comparison */}
             {(latestPre || latestPost) && (
                 <div className="glass-card p-6">
-                    <h2 className="text-lg font-semibold text-white mb-4">📊 前後測對比</h2>
+                    <h2 className="text-lg font-semibold text-[#333] mb-4">📊 前後測對比</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
-                            <p className="text-xs text-amber-400 font-medium mb-1">最新前測</p>
-                            <p className="text-sm text-white">{latestPre ? new Date(latestPre.created_at).toLocaleDateString('zh-TW') : '尚未進行'}</p>
+                        <div className="p-3 rounded-xl bg-amber-50 border border-amber-200">
+                            <p className="text-xs text-amber-600 font-medium mb-1">最新前測</p>
+                            <p className="text-sm text-[#333]">{latestPre ? new Date(latestPre.created_at).toLocaleDateString('zh-TW') : '尚未進行'}</p>
                         </div>
-                        <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-                            <p className="text-xs text-emerald-400 font-medium mb-1">最新後測</p>
-                            <p className="text-sm text-white">{latestPost ? new Date(latestPost.created_at).toLocaleDateString('zh-TW') : '尚未進行'}</p>
+                        <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200">
+                            <p className="text-xs text-emerald-600 font-medium mb-1">最新後測</p>
+                            <p className="text-sm text-[#333]">{latestPost ? new Date(latestPost.created_at).toLocaleDateString('zh-TW') : '尚未進行'}</p>
                         </div>
                     </div>
                     <div className="space-y-0">
@@ -202,11 +202,11 @@ export default function ElderDetailPage() {
 
             {/* Session History */}
             <div className="glass-card p-6">
-                <h2 className="text-lg font-semibold text-white mb-4">📋 分析紀錄 ({sessions.length})</h2>
+                <h2 className="text-lg font-semibold text-[#333] mb-4">📋 分析紀錄 ({sessions.length})</h2>
                 {sessions.length === 0 ? (
                     <div className="text-center py-10">
                         <p className="text-4xl mb-3">📭</p>
-                        <p className="text-slate-400">尚無分析紀錄</p>
+                        <p className="text-[#666]">尚無分析紀錄</p>
                         <Link href={`/analysis/${elderId}`} className="inline-block mt-3 btn-accent text-sm">
                             開始第一次分析
                         </Link>
@@ -214,19 +214,19 @@ export default function ElderDetailPage() {
                 ) : (
                     <div className="space-y-2">
                         {sessions.map((session) => (
-                            <div key={session.id} className="rounded-xl bg-white/5 overflow-hidden">
+                            <div key={session.id} className="rounded-xl bg-[#f5f5f5] overflow-hidden">
                                 <button
                                     onClick={() => setExpandedSession(expandedSession === session.id ? null : session.id)}
-                                    className="w-full flex items-center justify-between p-4 hover:bg-white/5 transition-colors text-left"
+                                    className="w-full flex items-center justify-between p-4 hover:bg-[#f5f5f5] transition-colors text-left"
                                 >
                                     <div className="flex items-center gap-3">
-                                        <span className={`px-2 py-1 rounded-lg text-xs font-medium ${session.test_type === 'pre' ? 'bg-amber-500/20 text-amber-400' :
-                                            session.test_type === 'post' ? 'bg-emerald-500/20 text-emerald-400' :
-                                                'bg-slate-500/20 text-slate-400'
+                                        <span className={`px-2 py-1 rounded-lg text-xs font-medium ${session.test_type === 'pre' ? 'bg-amber-50 text-amber-600' :
+                                            session.test_type === 'post' ? 'bg-emerald-50 text-emerald-600' :
+                                                'bg-slate-100 text-[#666]'
                                             }`}>
                                             {session.test_type === 'pre' ? '前測' : session.test_type === 'post' ? '後測' : '練習'}
                                         </span>
-                                        <span className="text-white text-sm">{new Date(session.created_at).toLocaleString('zh-TW')}</span>
+                                        <span className="text-[#333] text-sm">{new Date(session.created_at).toLocaleString('zh-TW')}</span>
                                         {session.duration_seconds && (
                                             <span className="text-xs text-slate-500">{Math.round(session.duration_seconds)}秒</span>
                                         )}
@@ -236,31 +236,31 @@ export default function ElderDetailPage() {
                                 {expandedSession === session.id && (
                                     <div className="px-4 pb-4 space-y-3">
                                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-sm">
-                                            <div className="p-2 rounded-lg bg-white/5">
+                                            <div className="p-2 rounded-lg bg-[#f5f5f5]">
                                                 <p className="text-xs text-slate-500">肘ROM</p>
-                                                <p className="text-white font-medium">{session.avg_elbow_rom?.toFixed(1) ?? '--'}°</p>
+                                                <p className="text-[#333] font-medium">{session.avg_elbow_rom?.toFixed(1) ?? '--'}°</p>
                                             </div>
-                                            <div className="p-2 rounded-lg bg-white/5">
+                                            <div className="p-2 rounded-lg bg-[#f5f5f5]">
                                                 <p className="text-xs text-slate-500">肩ROM</p>
-                                                <p className="text-white font-medium">{session.avg_shoulder_rom?.toFixed(1) ?? '--'}°</p>
+                                                <p className="text-[#333] font-medium">{session.avg_shoulder_rom?.toFixed(1) ?? '--'}°</p>
                                             </div>
-                                            <div className="p-2 rounded-lg bg-white/5">
+                                            <div className="p-2 rounded-lg bg-[#f5f5f5]">
                                                 <p className="text-xs text-slate-500">核心穩定性</p>
-                                                <p className="text-white font-medium">{session.avg_core_stability?.toFixed(1) ?? '--'}°</p>
+                                                <p className="text-[#333] font-medium">{session.avg_core_stability?.toFixed(1) ?? '--'}°</p>
                                             </div>
-                                            <div className="p-2 rounded-lg bg-white/5">
+                                            <div className="p-2 rounded-lg bg-[#f5f5f5]">
                                                 <p className="text-xs text-slate-500">軀幹傾斜</p>
-                                                <p className="text-white font-medium">{session.avg_trunk_tilt?.toFixed(1) ?? '--'}°</p>
+                                                <p className="text-[#333] font-medium">{session.avg_trunk_tilt?.toFixed(1) ?? '--'}°</p>
                                             </div>
-                                            <div className="p-2 rounded-lg bg-white/5">
+                                            <div className="p-2 rounded-lg bg-[#f5f5f5]">
                                                 <p className="text-xs text-slate-500">震顫</p>
-                                                <p className={`font-medium ${session.tremor_detected ? 'text-amber-400' : 'text-emerald-400'}`}>
+                                                <p className={`font-medium ${session.tremor_detected ? 'text-amber-600' : 'text-emerald-600'}`}>
                                                     {session.tremor_detected ? '檢測到' : '未檢測到'}
                                                 </p>
                                             </div>
-                                            <div className="p-2 rounded-lg bg-white/5">
+                                            <div className="p-2 rounded-lg bg-[#f5f5f5]">
                                                 <p className="text-xs text-slate-500">代償動作</p>
-                                                <p className={`font-medium ${session.compensation_detected ? 'text-amber-400' : 'text-emerald-400'}`}>
+                                                <p className={`font-medium ${session.compensation_detected ? 'text-amber-600' : 'text-emerald-600'}`}>
                                                     {session.compensation_detected ? '檢測到' : '未檢測到'}
                                                 </p>
                                             </div>
