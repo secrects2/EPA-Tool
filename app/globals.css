@@ -5,10 +5,14 @@
 @tailwind utilities;
 
 :root {
-  --gradient-primary: linear-gradient(135deg, #0c93e7 0%, #015da0 100%);
+  --color-primary: #0D9488;
+  --color-primary-light: #14B8A6;
+  --color-primary-dark: #0F766E;
+  --color-primary-bg: rgba(13, 148, 136, 0.06);
+  --color-accent: #F97316;
+  --color-accent-bg: rgba(249, 115, 22, 0.06);
+  --gradient-primary: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%);
   --gradient-accent: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
-  --glass-bg: rgba(255, 255, 255, 0.75);
-  --glass-border: rgba(0, 0, 0, 0.08);
 }
 
 * {
@@ -17,94 +21,137 @@
 
 body {
   font-family: 'Inter', 'Noto Sans TC', system-ui, sans-serif;
-  background: linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 100%);
-  color: #1e293b;
+  background: #f8fafa;
+  color: #333333;
   min-height: 100vh;
   overscroll-behavior-y: none;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
 }
 
-/* Glass morphism card — light mode */
+/* ===== Card — 日系乾淨白卡 ===== */
 .glass-card {
-  @apply rounded-2xl border backdrop-blur-xl;
-  background: var(--glass-bg);
-  border-color: var(--glass-border);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  @apply rounded-2xl border;
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03), 0 4px 12px rgba(0, 0, 0, 0.02);
 }
 
-/* Gradient text */
+.glass-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05), 0 8px 24px rgba(0, 0, 0, 0.03);
+}
+
+/* ===== Gradient text — teal ===== */
 .gradient-text {
   @apply bg-clip-text text-transparent;
   background-image: var(--gradient-primary);
 }
 
-/* Primary button */
+/* ===== Section title with left accent bar ===== */
+.section-title {
+  @apply text-base font-bold flex items-center gap-2;
+  color: #333;
+}
+
+.section-title::before {
+  content: '';
+  display: inline-block;
+  width: 3px;
+  height: 1.1em;
+  border-radius: 2px;
+  background: var(--color-primary);
+  flex-shrink: 0;
+}
+
+/* ===== Primary button — teal solid ===== */
 .btn-primary {
-  @apply px-6 py-3 rounded-xl font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95;
-  background: var(--gradient-primary);
-  box-shadow: 0 4px 15px rgba(12, 147, 231, 0.3);
+  @apply px-6 py-3 rounded-xl font-semibold text-white transition-all duration-200 hover:shadow-lg active:scale-[0.98];
+  background: var(--color-primary);
+  box-shadow: 0 2px 8px rgba(13, 148, 136, 0.25);
 }
 
 .btn-primary:hover {
-  box-shadow: 0 8px 25px rgba(12, 147, 231, 0.45);
+  background: var(--color-primary-light);
+  box-shadow: 0 4px 16px rgba(13, 148, 136, 0.3);
 }
 
-/* Accent button */
+/* ===== Accent button ===== */
 .btn-accent {
-  @apply px-6 py-3 rounded-xl font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95;
-  background: var(--gradient-accent);
-  box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+  @apply px-6 py-3 rounded-xl font-semibold text-white transition-all duration-200 hover:shadow-lg active:scale-[0.98];
+  background: var(--color-accent);
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.25);
 }
 
-/* Google login button */
+/* ===== Google login button ===== */
 .btn-google {
-  @apply px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 flex items-center gap-3;
+  @apply px-6 py-3 rounded-xl font-semibold transition-all duration-200 hover:shadow-lg active:scale-[0.98] flex items-center gap-3;
   background: white;
-  color: #1f2937;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  color: #333;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .btn-google:hover {
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Sidebar — light mode */
+/* ===== Pill badge ===== */
+.pill-badge {
+  @apply text-xs font-medium px-2.5 py-0.5 rounded-full;
+}
+
+.pill-badge-teal {
+  background: var(--color-primary-bg);
+  color: var(--color-primary);
+}
+
+.pill-badge-orange {
+  background: var(--color-accent-bg);
+  color: var(--color-accent);
+}
+
+/* ===== Sidebar — light clean ===== */
 .sidebar-item {
-  @apply flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 cursor-pointer text-slate-600;
+  @apply flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 cursor-pointer;
+  color: #666;
 }
 
 .sidebar-item:hover {
-  @apply text-slate-900;
-  background: rgba(0, 0, 0, 0.04);
+  color: #333;
+  background: rgba(0, 0, 0, 0.03);
 }
 
 .sidebar-item.active {
-  @apply text-white font-medium;
-  background: var(--gradient-primary);
-  box-shadow: 0 4px 15px rgba(12, 147, 231, 0.3);
+  @apply font-medium;
+  color: white;
+  background: var(--color-primary);
+  box-shadow: 0 2px 8px rgba(13, 148, 136, 0.3);
 }
 
-/* Stats card */
+/* ===== Stats card ===== */
 .stats-card {
   @apply glass-card p-5 flex flex-col gap-2;
 }
 
 .stats-card .stats-value {
-  @apply text-3xl font-bold text-slate-900;
+  @apply text-3xl font-bold;
+  color: #222;
 }
 
 .stats-card .stats-label {
-  @apply text-sm text-slate-500;
+  @apply text-sm;
+  color: #888;
 }
 
-/* Smooth scroll */
+/* ===== Smooth scroll ===== */
 html {
   scroll-behavior: smooth;
   overscroll-behavior-y: none;
 }
 
-/* Custom scrollbar */
+/* ===== Custom scrollbar ===== */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -112,15 +159,15 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(100, 116, 139, 0.25);
+  background: rgba(0, 0, 0, 0.1);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(100, 116, 139, 0.4);
+  background: rgba(0, 0, 0, 0.2);
 }
 
-/* Animation keyframes */
+/* ===== Animation keyframes ===== */
 @keyframes float {
 
   0%,

@@ -20,9 +20,9 @@ interface AnalysisReportProps {
 // ============================================================================
 
 const PRIORITY_STYLES = {
-    high: { bg: 'bg-red-500/10', border: 'border-red-500/30', badge: 'bg-red-500', label: '高' },
-    medium: { bg: 'bg-amber-500/10', border: 'border-amber-500/30', badge: 'bg-amber-500', label: '中' },
-    low: { bg: 'bg-blue-500/10', border: 'border-blue-500/30', badge: 'bg-blue-500', label: '低' },
+    high: { bg: 'bg-rose-50', border: 'border-rose-200', badge: 'bg-rose-500', label: '高' },
+    medium: { bg: 'bg-amber-50', border: 'border-amber-200', badge: 'bg-amber-500', label: '中' },
+    low: { bg: 'bg-teal-50', border: 'border-teal-200', badge: 'bg-teal-500', label: '低' },
 }
 
 function formatDuration(sec: number): string {
@@ -76,9 +76,9 @@ function RadarChart({ metrics }: { metrics: AnalysisMetrics }) {
                     return <line key={i} x1={cx} y1={cy} x2={p.x} y2={p.y} stroke="rgba(0,0,0,0.04)" strokeWidth={1} />
                 })}
                 {/* 數據區域 */}
-                <path d={dataPath} fill="rgba(59,130,246,0.25)" stroke="rgb(59,130,246)" strokeWidth={2} />
+                <path d={dataPath} fill="rgba(13,148,136,0.15)" stroke="#0D9488" strokeWidth={1.5} />
                 {dataPoints.map((p, i) => (
-                    <circle key={i} cx={p.x} cy={p.y} r={3.5} fill="#3B82F6" stroke="#1E3A5F" strokeWidth={1.5} />
+                    <circle key={i} cx={p.x} cy={p.y} r={3} fill="#0D9488" stroke="white" strokeWidth={1.5} />
                 ))}
                 {/* 標籤 */}
                 {dims.map((d, i) => {
@@ -96,7 +96,7 @@ function RadarChart({ metrics }: { metrics: AnalysisMetrics }) {
 /** 柱狀圖 - 各指標與理想值對比 */
 function BarChart({ metrics }: { metrics: AnalysisMetrics }) {
     const bars = [
-        { label: 'ROM', value: metrics.avg_rom, ideal: 160, unit: '°', color: '#3B82F6' },
+        { label: 'ROM', value: metrics.avg_rom, ideal: 160, unit: '°', color: '#0D9488' },
         { label: '穩定率', value: metrics.stable_ratio, ideal: 80, unit: '%', color: '#10B981' },
         { label: '軀幹', value: Math.max(0, 100 - metrics.avg_trunk_tilt * 4), ideal: 80, unit: '', color: '#8B5CF6' },
         { label: '手控制', value: Math.max(0, 100 - metrics.tremor_detected_ratio * 2), ideal: 90, unit: '', color: '#F59E0B' },
@@ -133,7 +133,7 @@ function BarChart({ metrics }: { metrics: AnalysisMetrics }) {
                     </div>
                 )
             })}
-            <p className="text-[9px] text-slate-400 text-center mt-1">白色標記線 = 理想值</p>
+            <p className="text-[9px] text-[#999] text-center mt-1">灰色標記線 = 理想值</p>
         </div>
     )
 }
@@ -146,7 +146,7 @@ function DonutChart({ metrics }: { metrics: AnalysisMetrics }) {
     const normal = Math.max(0, 100 - stable) // unstable portion not covered by tremor/comp
 
     const segments = [
-        { label: '穩定動作', value: stable, color: '#10B981' },
+        { label: '穩定動作', value: stable, color: '#0D9488' },
         { label: '震顫影響', value: tremor, color: '#F59E0B' },
         { label: '代償動作', value: comp, color: '#EF4444' },
         { label: '其他不穩定', value: Math.max(0, normal - tremor - comp), color: '#6B7280' },
@@ -347,7 +347,7 @@ export default function AnalysisReport({ metrics, patientName, sessionDate, dura
                     <button
                         onClick={handleDownloadPdf}
                         disabled={downloading}
-                        className="px-3 py-2 rounded-xl bg-primary-600 text-sm text-white hover:bg-primary-700 transition-colors disabled:opacity-50"
+                        className="px-3 py-2 rounded-xl text-sm text-white transition-colors disabled:opacity-50" style={{ background: 'var(--color-primary)' }}
                     >
                         {downloading ? '產生中...' : '📤 儲存報告'}
                     </button>
@@ -359,28 +359,26 @@ export default function AnalysisReport({ metrics, patientName, sessionDate, dura
 
             <div ref={contentRef} className="max-w-2xl mx-auto p-4 pb-20 space-y-6">
 
-                {/* ===== 1. 總評 ===== */}
-                <section className="glass-card p-6 text-center space-y-4">
-                    <div className="inline-flex items-center justify-center w-24 h-24 rounded-full mx-auto"
-                        style={{ background: `conic-gradient(${report.overall.color} ${report.overall.score}%, #e2e8f0 ${report.overall.score}%)`, padding: '4px' }}>
-                        <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
-                            <span className="text-3xl font-black text-slate-800">{report.overall.score}</span>
-                        </div>
+                <section className="glass-card p-8 text-center space-y-4">
+                    <p className="text-xs" style={{ color: '#999' }}>綜合評分</p>
+                    <div className="flex items-baseline justify-center gap-1">
+                        <span className="text-5xl font-extrabold" style={{ color: '#222' }}>{report.overall.score}</span>
+                        <span className="text-lg font-medium" style={{ color: '#aaa' }}>/100</span>
                     </div>
                     <div>
                         <span className="inline-block px-4 py-1 rounded-full text-sm font-bold text-white" style={{ backgroundColor: report.overall.color }}>
                             {report.overall.level}
                         </span>
                     </div>
-                    <p className="text-sm text-slate-600">{report.overall.summary}</p>
+                    <p className="text-sm" style={{ color: '#555', lineHeight: 1.8 }}>{report.overall.summary}</p>
                     {durationSeconds != null && (
-                        <p className="text-xs text-slate-500">分析時長：{formatDuration(durationSeconds)} · 投擲次數：{metrics.throw_count} 次</p>
+                        <p className="text-xs" style={{ color: '#999' }}>分析時長：{formatDuration(durationSeconds)} · 投擲次數：{metrics.throw_count} 次</p>
                     )}
                 </section>
 
                 {/* ===== 2. 雷達圖 — 五維能力 ===== */}
                 <section className="space-y-3">
-                    <h2 className="text-base font-bold text-slate-800 flex items-center gap-2">🕸️ 五維能力評估</h2>
+                    <h2 className="section-title">五維能力評估</h2>
                     <div className="glass-card p-4 flex justify-center">
                         <RadarChart metrics={metrics} />
                     </div>
@@ -388,7 +386,7 @@ export default function AnalysisReport({ metrics, patientName, sessionDate, dura
 
                 {/* ===== 3. 柱狀圖 — 指標對比 ===== */}
                 <section className="space-y-3">
-                    <h2 className="text-base font-bold text-slate-800 flex items-center gap-2">📊 指標 vs 理想值</h2>
+                    <h2 className="section-title">指標 vs 理想值</h2>
                     <div className="glass-card p-4">
                         <BarChart metrics={metrics} />
                     </div>
@@ -396,7 +394,7 @@ export default function AnalysisReport({ metrics, patientName, sessionDate, dura
 
                 {/* ===== 4. 圓餅圖 — 動作品質 ===== */}
                 <section className="space-y-3">
-                    <h2 className="text-base font-bold text-slate-800 flex items-center gap-2">🎯 動作品質分布</h2>
+                    <h2 className="section-title">動作品質分布</h2>
                     <div className="glass-card p-4 flex justify-center">
                         <DonutChart metrics={metrics} />
                     </div>
@@ -404,7 +402,7 @@ export default function AnalysisReport({ metrics, patientName, sessionDate, dura
 
                 {/* ===== 5. 關鍵數據 ===== */}
                 <section className="space-y-3">
-                    <h2 className="text-base font-bold text-slate-800 flex items-center gap-2">📈 關鍵數據</h2>
+                    <h2 className="section-title">關鍵數據</h2>
                     <div className="grid grid-cols-2 gap-3">
                         <MetricCard label="手肘伸展度" value={`${metrics.avg_rom}°`} ideal="≥150°" good={metrics.avg_rom >= 150} />
                         <MetricCard label="軀幹傾斜" value={`${metrics.avg_trunk_tilt}°`} ideal="≤10°" good={metrics.avg_trunk_tilt <= 10} />
@@ -429,17 +427,17 @@ export default function AnalysisReport({ metrics, patientName, sessionDate, dura
 
                 {/* ===== 6. 健康風險推論 ===== */}
                 <section className="space-y-3">
-                    <h2 className="text-base font-bold text-slate-800 flex items-center gap-2">🔍 運動表現風險提示</h2>
+                    <h2 className="section-title">運動表現風險提示</h2>
                     <HealthInferences metrics={metrics} />
                 </section>
 
                 {/* ===== 7. 優勢 ===== */}
                 {report.strengths.length > 0 && (
                     <section className="space-y-3">
-                        <h2 className="text-base font-bold text-slate-800 flex items-center gap-2">✅ 優勢項目</h2>
+                        <h2 className="section-title">優勢項目</h2>
                         <div className="glass-card p-4 space-y-2">
                             {report.strengths.map((s, i) => (
-                                <div key={i} className="flex items-start gap-2 text-sm text-green-400">
+                                <div key={i} className="flex items-start gap-2 text-sm text-green-600">
                                     <span className="shrink-0 mt-0.5">•</span><span>{s}</span>
                                 </div>
                             ))}
@@ -450,10 +448,10 @@ export default function AnalysisReport({ metrics, patientName, sessionDate, dura
                 {/* ===== 8. 需注意 ===== */}
                 {report.concerns.length > 0 && (
                     <section className="space-y-3">
-                        <h2 className="text-base font-bold text-slate-800 flex items-center gap-2">⚠️ 需注意</h2>
+                        <h2 className="section-title">需注意</h2>
                         <div className="glass-card p-4 space-y-2">
                             {report.concerns.map((c, i) => (
-                                <div key={i} className="flex items-start gap-2 text-sm text-amber-400">
+                                <div key={i} className="flex items-start gap-2 text-sm text-amber-600">
                                     <span className="shrink-0 mt-0.5">•</span><span>{c}</span>
                                 </div>
                             ))}
@@ -463,7 +461,7 @@ export default function AnalysisReport({ metrics, patientName, sessionDate, dura
 
                 {/* ===== 9. AI 建議處方 ===== */}
                 <section className="space-y-3">
-                    <h2 className="text-base font-bold text-slate-800 flex items-center gap-2">💡 AI 訓練建議</h2>
+                    <h2 className="section-title">AI 訓練建議</h2>
                     <div className="space-y-4">
                         {report.prescriptions.map((rx, i) => {
                             const style = PRIORITY_STYLES[rx.priority]
@@ -484,7 +482,7 @@ export default function AnalysisReport({ metrics, patientName, sessionDate, dura
                                     <p className="text-xs text-slate-600">{rx.description}</p>
                                     <div className="space-y-1.5">
                                         {rx.exercises.map((ex, j) => (
-                                            <div key={j} className="flex items-start gap-2 text-xs text-slate-300">
+                                            <div key={j} className="flex items-start gap-2 text-xs text-[#666]">
                                                 <span className="text-white font-bold shrink-0">{j + 1}.</span><span>{ex}</span>
                                             </div>
                                         ))}
