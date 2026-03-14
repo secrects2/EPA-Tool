@@ -463,7 +463,7 @@ export default function AnalysisReport({ metrics, patientName, sessionDate, dura
                 <section className="space-y-3">
                     <h2 className="section-title">AI 訓練建議</h2>
                     <div className="rounded-2xl overflow-hidden mb-2">
-                        <img src="/images/balance-training.png" alt="訓練建議" className="w-full h-44 object-cover object-center" />
+                        <img src="/images/balance-training.png" alt="訓練建議" className="w-full h-44 object-cover object-top" />
                     </div>
                     <div className="space-y-4">
                         {report.prescriptions.map((rx, i) => {
