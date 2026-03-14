@@ -259,7 +259,7 @@ export default function LoginPage() {
                             </section>
                             <section>
                                 <h3 className="font-semibold text-white mb-2">四、損害賠償免責</h3>
-                                <p>惠生長照事業有限公司對因使用本系統造成之任何損害，不負賠償責任。</p>
+                                <p>惠生醫藥集團對因使用本系統造成之任何損害，不負賠償責任。</p>
                             </section>
                         </div>
                         <div className="pt-3 border-t border-white/10 flex gap-3">

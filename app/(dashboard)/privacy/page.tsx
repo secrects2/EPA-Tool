@@ -49,7 +49,7 @@
 
             <section className="space-y-3">
                 <h2 className="text-xl font-semibold text-slate-800">五、聯絡方式</h2>
-                <p className="text-sm">如有任何隱私權相關問題，請聯繫惠生長照事業有限公司。</p>
+                <p className="text-sm">如有任何隱私權相關問題，請聯繫惠生醫藥集團。</p>
             </section>
         </div>
     )

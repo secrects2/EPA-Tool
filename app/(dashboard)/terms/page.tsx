@@ -6,7 +6,7 @@
 
             <section className="space-y-3">
                 <h2 className="text-xl font-semibold text-slate-800">一、服務說明</h2>
-                <p>「惠生 ICOPE & 地板滾球檢測平台」（以下稱本系統）由惠生長照事業有限公司開發與營運，提供 ICOPE 長者內在能力前後測評估及地板滾球 AI 動作分析服務。</p>
+                <p>「惠生檢測平台」（以下稱本系統）由惠生醫藥集團（KeiSei Holistic Pharmaceutical CO., LTD.）開發與營運，提供 ICOPE 長者內在能力前後測評估及地板滾球 AI 動作分析服務。</p>
             </section>
 
             <section className="space-y-3">
@@ -39,7 +39,7 @@
 
             <section className="space-y-3">
                 <h2 className="text-xl font-semibold text-slate-800">五、智慧財產權</h2>
-                <p className="text-sm">本系統之所有程式碼、介面設計、AI 模型與相關技術均為惠生長照事業有限公司所有，未經書面同意不得複製、修改或散佈。</p>
+                <p className="text-sm">本系統之所有程式碼、介面設計、AI 模型與相關技術均為惠生醫藥集團所有，未經書面同意不得複製、修改或散佈。</p>
             </section>
         </div>
     )
