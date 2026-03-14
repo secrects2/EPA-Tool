@@ -126,6 +126,16 @@ function SecondaryContent() {
 
             if (error) throw new Error(error.message)
 
+            // 更新 assessment 的 post_test_completed 標記
+            const { error: updateErr } = await supabase
+                .from('assessments')
+                .update({ post_test_completed: true })
+                .eq('id', assessmentId)
+
+            if (updateErr) {
+                console.error('更新後測狀態失敗:', updateErr.message)
+            }
+
             toast.success('複評已完成並儲存！')
             logActivity(
                 '完成 ICOPE 複評',
