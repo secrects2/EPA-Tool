@@ -7,31 +7,38 @@
                 <div className="flex items-start gap-4">
                     <div className="w-12 h-12 rounded-xl bg-primary-600/20 flex items-center justify-center text-2xl shrink-0">🏢</div>
                     <div>
-                        <h2 className="text-lg font-semibold text-slate-800">惠生長照事業有限公司</h2>
-                        <p className="text-sm text-slate-400 mt-1">ICOPE & 地板滾球檢測平台開發與營運</p>
+                        <h2 className="text-lg font-semibold text-slate-800">KeiSei Holistic Pharmaceutical CO., LTD.</h2>
+                        <p className="text-sm text-[#555] mt-1">惠生醫藥集團 — 惠生檢測平台開發與營運</p>
                     </div>
                 </div>
 
                 <div className="space-y-3 text-sm">
                     <div className="flex items-center gap-3">
-                        <span className="text-lg">📧</span>
+                        <span className="text-lg">👤</span>
                         <div>
-                            <p className="text-slate-500">電子郵件</p>
-                            <p className="text-slate-800">contact@huisheng.com.tw</p>
+                            <p className="text-[#888]">代表人</p>
+                            <p className="text-[#333]">廖昱喬</p>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <span className="text-lg">🏢</span>
+                        <div>
+                            <p className="text-[#888]">統一編號</p>
+                            <p className="text-[#333]">90686586</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-3">
                         <span className="text-lg">📞</span>
                         <div>
-                            <p className="text-slate-500">聯絡電話</p>
-                            <p className="text-slate-800">(02) 1234-5678</p>
+                            <p className="text-[#888]">聯絡電話</p>
+                            <p className="text-[#333]">04-23196710</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-3">
                         <span className="text-lg">📍</span>
                         <div>
-                            <p className="text-slate-500">公司地址</p>
-                            <p className="text-slate-800">臺灣</p>
+                            <p className="text-[#888]">公司地址</p>
+                            <p className="text-[#333]">臺中市北區淡溝里臺灣大道二段340號10樓之1</p>
                         </div>
                     </div>
                 </div>
