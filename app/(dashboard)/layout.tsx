@@ -159,7 +159,7 @@ export default function DashboardLayout({
                 <footer className="border-t border-slate-200 px-4 md:px-6 lg:px-8 py-6 mt-8">
                     <div className="max-w-4xl mx-auto">
                         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
-                            <p>© {new Date().getFullYear()} 惠生長照事業有限公司 版權所有</p>
+                            <p>© {new Date().getFullYear()} 惠生醫藥集團 版權所有</p>
                             <div className="flex items-center gap-4">
                                 <a href="/privacy" className="hover:text-primary-600 transition-colors">隱私權政策</a>
                                 <span>·</span>
